@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id             Int       @id @default(autoincrement())
+  firstName      String
+  lastName       String
+  email          String    @unique
+  bookingHistory Booking[]
+}
+
+model Tariff {
+  id           Int      @id @default(autoincrement())
+  vehicleType  String
+  fuelType     String
+  distanceRate Float
+  gst          Float
+  Driver       Driver[]
+}
+
+model Driver {
+  id                 Int       @id @default(autoincrement())
+  firstName          String
+  lastName           String
+  email              String    @unique
+  phone              String
+  licenseNumber      String
+  vehiclePlateNumber String
+  availability       Boolean
+  totalTrips         Int
+  tariff             Tariff    @relation(fields: [tariffId], references: [id])
+  tariffId           Int
+  bookings           Booking[] // One-to-Many relationship with Booking table
+}
+
+// Define the data model for User table (if needed)
+model User {
+  id        Int       @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String    @unique
+  phone     String
+  bookings  Booking[] // One-to-Many relationship with Booking table
+}
+
+// Define the data model for Booking table
+model Booking {
+  id              Int      @id @default(autoincrement())
+  admin           Admin    @relation(fields: [adminId], references: [id])
+  adminId         Int
+  user            User     @relation(fields: [userId], references: [id])
+  userId          Int
+  driver          Driver   @relation(fields: [driverId], references: [id])
+  driverId        Int
+  pickupLocation  String
+  dropoffLocation String
+  bookingTime     DateTime
+  pickupTime      DateTime
+  dropoffTime     DateTime
+  totalFare       Float
+  paymentMethod   String
+  bookingStatus   String
+}
