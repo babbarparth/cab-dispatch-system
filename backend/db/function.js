@@ -84,11 +84,11 @@ const getTariffById = async (id) => {
   }
 };
 
-const updateTariffById = async (id, tariffData) => {
+const updateTariffById = async (id, price) => {
   try {
     const updatedTariff = await prisma.tariff.update({
       where: { id: parseInt(id) },
-      data: tariffData,
+      data: { distanceRate: parseFloat(price) }, // Corrected function to parseFloat
     });
     return updatedTariff;
   } catch (error) {

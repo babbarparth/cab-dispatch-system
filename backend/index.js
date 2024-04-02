@@ -2,7 +2,7 @@
 // const cors = require("cors");
 // const { getAllTrariff } = require("./db/function");
 
-import express, { urlencoded } from "express";
+import express, { urlencoded, json } from "express"; // Import json from express
 import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
@@ -18,12 +18,11 @@ dotenv.config();
 
 // Middleware
 app.use(cors());
-app.use(express.urlencoded({ extended: true }));
+app.use(urlencoded({ extended: true }));
+app.use(json()); // Add json middleware here
 app.use(helmet());
 
 // Routes
-// app.use("/api", routes);
-
 app.use("/api", distanceRoute);
 app.use("/api/booking", bookingRoute);
 app.use("/api/tariff", tariffRoute);

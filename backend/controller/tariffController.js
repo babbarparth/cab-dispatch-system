@@ -1,4 +1,4 @@
-import { getAllTariff } from "../db/function.js";
+import { getAllTariff, updateTariffById } from "../db/function.js";
 
 const allTariffs = async (req, res) => {
   try {
@@ -12,4 +12,18 @@ const allTariffs = async (req, res) => {
   }
 };
 
-export { allTariffs };
+const updateTariff = async (req, res) => {
+  const { id, distanceRate } = req.body;
+  console.log("req.body: ", req.body);
+  console.log("id: ", id);
+  console.log("distanceRate: ", distanceRate);
+  try {
+    const updatedTariff = await updateTariffById(id, distanceRate);
+    res.json(updatedTariff);
+  } catch (error) {
+    console.error("Error updating tariff:", error);
+    res.status(500).send("Internal server error");
+  }
+};
+
+export { allTariffs, updateTariff };
