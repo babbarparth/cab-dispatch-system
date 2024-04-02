@@ -70,6 +70,8 @@ model Booking {
   pickupTime      DateTime
   dropoffTime     DateTime
   totalFare       Float
+  userEmail       String
+  TariffID        Int
   paymentMethod   String
   bookingStatus   String
 }
