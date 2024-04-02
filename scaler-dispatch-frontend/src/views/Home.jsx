@@ -16,7 +16,7 @@ const Home = () => {
         <div className="flex flex-col gap-4 min-[calc(100vw_-_theme(spacing.8))] sm:min-w-[400px]">
           <a href="/bookings">
           <button
-            className="flex items-center justify-center h-12 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
+            className="flex items-center justify-center h-14 w-[500px] rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
             onClick={() => console.log('Book a Cab')}
           >
             Book a Cab
@@ -24,7 +24,7 @@ const Home = () => {
           </a>
           <a href="/currentBookings">
           <button
-            className="flex items-center justify-center h-12 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
+            className="flex items-center justify-center h-14 w-[500px] rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
             onClick={() => console.log('Current Bookings')}
           >
             Current Bookings
@@ -32,7 +32,7 @@ const Home = () => {
           </a>
           <a href="/editprice">
           <button
-            className="flex items-center justify-center h-12 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
+            className="flex items-center justify-center h-14 w-[500px] rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
             onClick={() => console.log('Edit Fare Prices')}
           >
             Edit Fare Prices
