@@ -3,6 +3,8 @@ import Home from "./views/Home"
 import LandingPage from "./views/LandingPage"
 import BookingPage from "./views/BookingPage"
 import BookingConfPage from "./views/BookingConfPage"
+import CurrentBookings from "./views/CurrentBookings"
+import EditPrice from "./views/EditPrice"
 
 function App() {
 
@@ -13,6 +15,8 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/bookings" element={<BookingPage />} />
       <Route path="/booking" element={<BookingConfPage />} />
+      <Route path="/currentBookings" element={<CurrentBookings />} />
+      <Route path="/editprice" element={<EditPrice />} />
     </Routes>
     </BrowserRouter>
   )
