@@ -1,3 +1,5 @@
+import prisma from "./index.js";
+
 const addAdmin = async (adminData) => {
   try {
     const newAdmin = await prisma.admin.create({
@@ -56,6 +58,16 @@ const addTariff = async (tariffData) => {
     return newTariff;
   } catch (error) {
     console.error("Error adding tariff:", error);
+    throw error;
+  }
+};
+
+const getAllTariff = async () => {
+  try {
+    const tariffs = await prisma.tariff.findMany();
+    return tariffs;
+  } catch (error) {
+    console.error("Error fetching tariff:", error);
     throw error;
   }
 };
@@ -198,8 +210,6 @@ const deleteUserById = async (id) => {
 
 // Booking
 
-import prisma from "./index";
-
 const addBooking = async (bookingData) => {
   try {
     const newBooking = await prisma.booking.create({
@@ -208,6 +218,16 @@ const addBooking = async (bookingData) => {
     return newBooking;
   } catch (error) {
     console.error("Error adding booking:", error);
+    throw error;
+  }
+};
+
+const getAllBookings = async () => {
+  try {
+    const bookings = await prisma.booking.findMany();
+    return bookings;
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
     throw error;
   }
 };
@@ -254,13 +274,19 @@ export {
   updateAdminById,
   deleteAdminById,
   addTariff,
+  getAllTariff,
   getTariffById,
   updateTariffById,
   deleteTariffById,
+  addDriver,
+  getDriverById,
+  updateDriverById,
+  deleteDriverById,
   addUser,
   getUserById,
   updateUserById,
   deleteUserById,
+  getAllBookings,
   addBooking,
   getBookingById,
   updateBookingById,
