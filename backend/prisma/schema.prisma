@@ -22,12 +22,13 @@ model Admin {
 }
 
 model Tariff {
-  id           Int      @id @default(autoincrement())
-  vehicleType  String
-  fuelType     String
-  distanceRate Float
-  gst          Float
-  Driver       Driver[]
+  id             Int      @id @default(autoincrement())
+  vehicleType    String
+  fuelType       String
+  distanceRate   Float
+  gst            Float
+  availableAfter DateTime?
+  Driver         Driver[]
 }
 
 model Driver {

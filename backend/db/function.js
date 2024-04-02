@@ -97,6 +97,19 @@ const updateTariffById = async (id, price) => {
   }
 };
 
+const updateTariffAvailbilityById = async (id, datetime) => {
+  try {
+    const updatedTariff = await prisma.tariff.update({
+      where: { id: parseInt(id) },
+      data: { availableAfter: datetime }, // Corrected function to parseFloat
+    });
+    return updatedTariff;
+  } catch (error) {
+    console.error("Error updating tariff:", error);
+    throw error;
+  }
+};
+
 const deleteTariffById = async (id) => {
   try {
     await prisma.tariff.delete({
@@ -277,6 +290,7 @@ export {
   getAllTariff,
   getTariffById,
   updateTariffById,
+  updateTariffAvailbilityById,
   deleteTariffById,
   addDriver,
   getDriverById,

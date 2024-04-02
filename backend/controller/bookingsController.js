@@ -1,4 +1,18 @@
-import { getAllBookings, addBooking } from "../db/function.js";
+import {
+  getAllBookings,
+  addBooking,
+  updateTariffAvailbilityById,
+} from "../db/function.js";
+
+import nodemailer from "nodemailer";
+
+const bookingEmail = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "parthbabbar.cabsystem24@gmail.com",
+    pass: "kvqqmididvklrmtm",
+  },
+});
 
 const allBookings = async (req, res) => {
   try {
@@ -46,6 +60,26 @@ const createBookingService = async (req, res) => {
 
   try {
     const newBooking = await addBooking(bookingData);
+    await updateTariffAvailbilityById(TariffID, dropoffTime);
+    const mail = {
+      from: "Support Cab System",
+      to: userEmail,
+      subject: "Booking Confirmation",
+      html: `
+            <p>Name: Suport Email</p>
+            <p>Email: ${userEmail}</p>
+            <p>MessageP: "Thankyou Booking with use"</p>
+        `,
+    };
+    bookingEmail.sendMail(mail, (error) => {
+      if (error) {
+        console.log("Error sending email");
+        // res.json({ status: "ERROR" });
+      } else {
+        console.log("Message Sent");
+        // res.json({ status: "Message Sent" });
+      }
+    });
     res.json(newBooking);
   } catch (error) {
     console.error("Error creating booking:", error);
