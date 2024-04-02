@@ -61,14 +61,33 @@ const createBookingService = async (req, res) => {
   try {
     const newBooking = await addBooking(bookingData);
     await updateTariffAvailbilityById(TariffID, dropoffTime);
+    const formattedBookingTime = new Date(bookingTime).toLocaleString();
+    const formattedPickupTime = new Date(pickupTime).toLocaleString();
+    const formattedDropoffTime = new Date(dropoffTime).toLocaleString();
+
     const mail = {
       from: "Support Cab System",
       to: userEmail,
       subject: "Booking Confirmation",
       html: `
-            <p>Name: Suport Email</p>
-            <p>Email: ${userEmail}</p>
-            <p>MessageP: "Thankyou Booking with use"</p>
+           <h1>Booking Confirmation</h1>
+    <p>Dear ${userEmail},</p>
+    <p>We are delighted to confirm your booking with our cab system. Your booking details are as follows:</p>
+    <ul>
+      <li><strong>Pickup Location:</strong> ${pickupLocation}</li>
+      <li><strong>Dropoff Location:</strong> ${formattedBookingTime}</li>
+      <li><strong>Booking Time:</strong>  ${formattedPickupTime}</li>
+      <li><strong>Pickup Time:</strong>  ${formattedDropoffTime}</li>
+      <li><strong>Dropoff Time:</strong> ${dropoffTime}</li>
+      <li><strong>Total Time:</strong>  "${totalFare} mins"</li>
+    
+    </ul>
+
+    <p>Thank you for choosing our cab system. We look forward to serving you!</p>
+    <p>Best regards,<br/>Support Team</p>
+
+    <hr/>
+    <p><em>This is for testing purposes only. No actual cab has been booked. Created by Parth Babbar for Scaler assignment.</em></p>
         `,
     };
     bookingEmail.sendMail(mail, (error) => {
