@@ -1,5 +1,11 @@
+import Header from '../components/header_components';
+
+
 const BookingConfPage = () => {
   return (
+    <div className="flex flex-col min-h-screen">
+        <Header />
+
     <div className="container mx-auto mt-10">
       <h1 className="text-3xl font-bold mb-6">Booking Confirmation</h1>
 
@@ -9,6 +15,7 @@ const BookingConfPage = () => {
 
       <p>Your booking details:</p>
       {/* Display booking details here, such as source, destination, date, etc. */}
+    </div>
     </div>
   )
 }

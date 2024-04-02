@@ -1,17 +1,45 @@
+import Header from '../components/header_components';
 
 
 const Home = () => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', height: '100vh', paddingLeft: '60px', paddingTop: '300px' }}>
-      <button className="bg-blue-500 text-white px-6 py-3 rounded-md font-bold text-lg hover:bg-blue-600 mb-4">
-        <a href="/bookings" style={{ textDecoration: 'none', color: 'inherit' }}>Booking Page</a>
-      </button>
-      <button className="bg-blue-500 text-white px-6 py-3 rounded-md font-bold text-lg hover:bg-blue-600 mb-4">
-        <a href="/currentBookings" style={{ textDecoration: 'none', color: 'inherit' }}>Current Bookings</a>
-      </button>
-      <button className="bg-blue-500 text-white px-6 py-3 rounded-md font-bold text-lg hover:bg-blue-600">
-        <a href="/editprice" style={{ textDecoration: 'none', color: 'inherit' }}>Edit Fare Price</a>
-      </button>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex items-center flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
+        <div className="flex flex-col items-center gap-4 text-center">
+          <h1 className="text-3xl font-bold tracking-tighter">Your ride, on demand</h1>
+          <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
+            The most reliable and convenient way to get around the city. Book your ride with Dispatch and experience
+            top-notch service.
+          </p>
+        </div>
+        <div className="flex flex-col gap-4 min-[calc(100vw_-_theme(spacing.8))] sm:min-w-[400px]">
+          <a href="/bookings">
+          <button
+            className="flex items-center justify-center h-12 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
+            onClick={() => console.log('Book a Cab')}
+          >
+            Book a Cab
+          </button>
+          </a>
+          <a href="/currentBookings">
+          <button
+            className="flex items-center justify-center h-12 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
+            onClick={() => console.log('Current Bookings')}
+          >
+            Current Bookings
+          </button>
+          </a>
+          <a href="/editprice">
+          <button
+            className="flex items-center justify-center h-12 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
+            onClick={() => console.log('Edit Fare Prices')}
+          >
+            Edit Fare Prices
+          </button>
+          </a>
+        </div>
+      </main>
     </div>
   )
 }

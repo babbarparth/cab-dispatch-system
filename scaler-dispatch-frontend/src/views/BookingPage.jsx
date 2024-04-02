@@ -1,7 +1,12 @@
+import Header from '../components/header_components';
 
 
 const BookingPage = () => {
   return (
+    <div className="flex flex-col min-h-screen">
+        <Header />
+
+
     <div className="container mx-auto mt-10">
       <h1 className="text-3xl font-bold mb-6">Book a Cab</h1>
 
@@ -57,6 +62,7 @@ const BookingPage = () => {
           <button className="bg-blue-500 text-white px-6 py-3 rounded-md font-bold text-lg hover:bg-blue-600">Book Cab</button>
         </a>
       </div>
+    </div>
     </div>
   )
 }
