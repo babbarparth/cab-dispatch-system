@@ -29,7 +29,7 @@ This project is a web application developed using JavaScript, React, Node.js, an
 
 ## Deployment
 
-•⁠  ⁠Frontend: The frontend of this application is deployed on [Vercel](https://vercel.com/). You can access it [here](https://scaler-dispatch-system.vercel.app/).<br>
+•⁠  ⁠Frontend: The frontend of this application is deployed on [Vercel](https://vercel.com/). You can access the web application [here](https://scaler-dispatch-system.vercel.app/).<br>
 •⁠  ⁠Backend: The backend is deployed on Render. 
 
 ## Environment Variables
