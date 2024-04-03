@@ -28,7 +28,7 @@ const Home = () => {
               className="flex items-center justify-center h-14 w-[500px] rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
               onClick={() => console.log("Current Bookings")}
             >
-              Current Bookings
+              Bookings History
             </button>
           </a>
           <a href="/editprice">

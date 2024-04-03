@@ -4,25 +4,22 @@ import axios from "axios";
 
 const CurrentBookings = () => {
   const [bookings, setBookings] = useState([]);
-
+  const [loading, setLoading] = useState(true); // State to manage loading animation
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
-    // Fetch bookings data from backend API
-    // Replace this with actual API call
     const fetchData = async () => {
       try {
-        axios
-          .get(`${import.meta.env.VITE_APP_BASE_URL}/api/booking/allBookings`, {
+        const response = await axios.get(
+          `${import.meta.env.VITE_APP_BASE_URL}/api/booking/allBookings`,
+          {
             headers: {
               "Content-Type": "application/json",
             },
-          })
-          .then((response) => {
-            setBookings(response.data);
-          })
-          .catch((error) => {
-            console.error("Error fetching bookings:", error);
-          });
+          }
+        );
+        setBookings(response.data);
+        setLoading(false); // Set loading to false when data is fetched
       } catch (error) {
         console.error("Error fetching bookings:", error);
       }
@@ -31,25 +28,62 @@ const CurrentBookings = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000); // Update current time every minute
+
+    return () => clearInterval(timer); // Cleanup interval on component unmount
+  }, []);
+
+  const getStatus = (booking) => {
+    const dropoffTime = new Date(booking.dropoffTime);
+    const pickupTime = new Date(booking.pickupTime);
+
+    if (currentTime < pickupTime) {
+      return "Upcoming";
+    } else if (currentTime >= pickupTime && currentTime < dropoffTime) {
+      return "Ongoing";
+    } else {
+      return "Completed";
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Header />
       <div className="container mx-auto py-8">
         <h2 className="text-3xl font-bold text-center mb-8">
-          Current Bookings
+          Bookings History
         </h2>
-        {bookings.length === 0 ? (
+        {loading ? ( // Display loading animation if data is being fetched
+          <div className="flex items-center justify-center">
+            <div className="spinner"></div>
+            <span>Loading...</span>
+          </div>
+        ) : bookings.length === 0 ? (
           <p>No bookings found</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {bookings.map((booking) => (
               <div
                 key={booking.id}
-                className="bg-white rounded-lg shadow-md p-6"
+                className={`bg-white rounded-lg shadow-md p-6 ${
+                  getStatus(booking) === "Upcoming"
+                    ? "border-yellow-400"
+                    : getStatus(booking) === "Ongoing"
+                    ? "border-blue-400"
+                    : "border-green-400"
+                }`}
               >
-                <h3 className="text-xl font-semibold mb-4">
-                  Booking #{booking.id}
-                </h3>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-semibold">
+                    Booking #{booking.id}
+                  </h3>
+                  <span className="text-sm font-semibold text-gray-500">
+                    Status: {getStatus(booking)}
+                  </span>
+                </div>
                 <p>
                   <span className="font-semibold">Pickup Location:</span>{" "}
                   {booking.pickupLocation}
@@ -71,8 +105,16 @@ const CurrentBookings = () => {
                   {new Date(booking.dropoffTime).toLocaleString()}
                 </p>
                 <p>
-                  <span className="font-semibold">Total Fare:</span> $
+                  <span className="font-semibold">Total Time:</span>{" "}
+                  {booking.totalMinutes} mins
+                </p>
+                <p>
+                  <span className="font-semibold">Total Fare:</span> ₹
                   {booking.totalFare.toFixed(2)}
+                </p>
+                <p>
+                  <span className="font-semibold">Shortest Route:</span>{" "}
+                  {booking.shortestRoute}
                 </p>
                 <p>
                   <span className="font-semibold">Payment Method:</span>{" "}

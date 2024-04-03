@@ -3,6 +3,8 @@ import Header from "../components/HeaderComponent";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import BookingForm from "../components/BookingForm";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const locations = ["A", "B", "C", "D", "E", "F"];
 
@@ -11,6 +13,7 @@ const BookingPage = () => {
 
   const [taxiData, setTaxiData] = useState([]);
   const [distances, setDistances] = useState({});
+  const [path, setPath] = useState({});
   const [source, setSource] = useState(null);
   const [destination, setDestination] = useState(null);
   const [selectedTariff, setSelectedTariff] = useState(null);
@@ -37,6 +40,7 @@ const BookingPage = () => {
           `${import.meta.env.VITE_APP_BASE_URL}/api/getDist`,
           {
             source,
+            destination,
           },
           {
             headers: {
@@ -45,14 +49,19 @@ const BookingPage = () => {
           }
         )
         .then((response) => {
-          console.log("data: ", response.data);
-          setDistances(response.data);
+          setDistances(response.data.distances);
+          setPath(response.data.shortestPath);
         })
         .catch((error) => {
           console.error("Error fetching distances:", error);
         });
     }
   }, [source, destination]);
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleSourceChange = (e) => {
     console.log(e.target.value);
@@ -65,6 +74,10 @@ const BookingPage = () => {
   };
 
   const handleSearch = () => {
+    if (!source || !destination) {
+      toast.error("Please select both source and destination.");
+      return;
+    }
     setShowTariffList(true);
   };
 
@@ -84,12 +97,20 @@ const BookingPage = () => {
 
   const handleBookCab = () => {
     if (!selectedTariff) {
-      console.error("Please select a tariff before booking.");
+      toast.error("Please select a tariff before booking.");
+      return;
+    }
+    if (!date || !time) {
+      toast.error("Please select both date and time.");
+      return;
+    }
+    if (!email || !validateEmail(email)) {
+      toast.error("Please enter a valid email address.");
       return;
     }
     console.log("here");
 
-    const pickUpDateTime = new Date(`${date}T${time}:00Z`);
+    const pickUpDateTime = new Date(`${date}T${time}`);
     const dropOffDateTime = new Date(
       pickUpDateTime.getTime() + distances[destination] * 60000
     ); // Convert minutes to milliseconds
@@ -103,10 +124,11 @@ const BookingPage = () => {
       bookingTime: new Date().toISOString(),
       pickupTime: pickUpDateTime, // Include date and time from state variables
       dropoffTime: dropOffDateTime,
-      totalFare:
-        distances[destination] * selectedTariff.distanceRate.toFixed(2),
+      totalFare: distances[destination] * selectedTariff.distanceRate,
+      totalMinutes: distances[destination],
+      shortestRoute: path.join(" -> "),
       userEmail: email,
-      TariffID: selectedTariff.id,
+      tariffId: selectedTariff.id,
       paymentMethod: "Credit Card",
       bookingStatus: "Confirmed", // Include other booking details as needed
     };
@@ -119,7 +141,8 @@ const BookingPage = () => {
       )
       .then((response) => {
         console.log("Booking created successfully:", response.data);
-        navigate("/booking");
+        toast.success("Booking created successfully!");
+        navigate("/home");
         // Redirect or perform any action after successful booking
       })
       .catch((error) => {
@@ -151,13 +174,14 @@ const BookingPage = () => {
           className="bg-blue-500 text-white px-6 py-3 rounded-md font-bold text-lg hover:bg-blue-600 mb-6"
           onClick={handleSearch}
         >
-          Search for a Cab
+          Search Cabs
         </button>
 
         {showTariffList && (
           <div>
-            Time from {source} to {destination} is{" "}
-            {distances && distances[destination]} mins
+            Time from {source} to {destination} is {distances[destination]}{" "}
+            mins.
+            <div>Shortest Route {path.join(" -> ")}</div>
             {/* Display the list of car types with their rates */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
               {taxiData.map((type, index) => {
@@ -166,86 +190,106 @@ const BookingPage = () => {
                   ? new Date(type.availableAfter) <= new Date()
                   : true; // If availableAfter is null, assume it's always available
 
-                return isTariffAvailable ? (
-                  <div
-                    key={index}
-                    className={`border rounded-md p-4 hover:bg-gray-100 transition-colors duration-300`}
-                  >
-                    <h2 className="text-lg font-semibold mb-3">
-                      {type.vehicleType}
-                    </h2>
-                    <div className="mb-2">
-                      <div>
-                        <label
-                          htmlFor={`${type.vehicleType}-total-price`}
-                          className="block text-sm font-semibold mb-1"
-                        >
-                          Total Price
-                        </label>
-                        <span
-                          id={`${type.vehicleType}-total-price`}
-                          className="text-gray-700"
-                        >
-                          $
-                          {(distances[destination] * type.distanceRate).toFixed(
-                            2
-                          )}
-                        </span>
+                return (
+                  <label key={index} htmlFor={`tariff-${index}`}>
+                    <div
+                      className={`border rounded-md p-4 transition-colors duration-300 ${
+                        selectedTariff === type
+                          ? "bg-blue-200"
+                          : "hover:bg-gray-100"
+                      } ${
+                        selectedTariff === type && !isTariffAvailable
+                          ? "no-hover"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        if (isTariffAvailable) {
+                          setSelectedTariff(type);
+                        }
+                      }}
+                    >
+                      <h2 className="text-lg font-semibold mb-3">
+                        {type.vehicleType}
+                      </h2>
+                      <div className="mb-2">
+                        <div>
+                          <label
+                            htmlFor={`${type.vehicleType}-total-price`}
+                            className="block text-sm font-semibold mb-1"
+                          >
+                            Total Price
+                          </label>
+                          <span
+                            id={`${type.vehicleType}-total-price`}
+                            className="text-gray-700"
+                          >
+                            ₹
+                            {(
+                              distances[destination] * type.distanceRate
+                            ).toFixed(2)}
+                          </span>
+                        </div>
+                        <div>
+                          <label
+                            htmlFor={`${type.vehicleType}-price`}
+                            className="block text-sm font-semibold mb-1"
+                          >
+                            Price (per min)
+                          </label>
+                          <span
+                            id={`${type.vehicleType}-price`}
+                            className="text-gray-700"
+                          >
+                            ₹{type.distanceRate}
+                          </span>
+                        </div>
+                        <div>
+                          <label
+                            htmlFor={`${type.vehicleType}-fueltype`}
+                            className="block text-sm font-semibold mb-1"
+                          >
+                            Fuel Type
+                          </label>
+                          <span
+                            id={`${type.fuelType}-fueltype`}
+                            className="text-gray-700"
+                          >
+                            {type.fuelType}
+                          </span>
+                        </div>
                       </div>
-                      <div>
-                        <label
-                          htmlFor={`${type.vehicleType}-price`}
-                          className="block text-sm font-semibold mb-1"
-                        >
-                          Price (per min)
-                        </label>
-                        <span
-                          id={`${type.vehicleType}-price`}
-                          className="text-gray-700"
-                        >
-                          $ {type.distanceRate}
+                      {isTariffAvailable ? (
+                        <input
+                          type="radio"
+                          id={`tariff-${index}`}
+                          name="tariff"
+                          value={type}
+                          onChange={() => setSelectedTariff(type)}
+                          checked={selectedTariff === type}
+                          className="hidden"
+                        />
+                      ) : (
+                        <span className="text-red-500">
+                          Available after{" "}
+                          {new Date(type.availableAfter).toLocaleString()}
                         </span>
-                      </div>
-                      <div>
-                        <label
-                          htmlFor={`${type.vehicleType}-fueltype`}
-                          className="block text-sm font-semibold mb-1"
-                        >
-                          Fuel Type
-                        </label>
-                        <span
-                          id={`${type.fuelType}-fueltype`}
-                          className="text-gray-700"
-                        >
-                          {type.fuelType}
-                        </span>
-                      </div>
+                      )}
                     </div>
-                    {/* Add radio button for selecting tariff */}
-                    <input
-                      type="radio"
-                      id={`tariff-${index}`}
-                      name="tariff"
-                      value={type}
-                      onChange={() => setSelectedTariff(type)}
-                      checked={selectedTariff === type}
-                    />
-                    <label htmlFor={`tariff-${index}`}>Select</label>
-                  </div>
-                ) : null;
+                  </label>
+                );
               })}
             </div>
+            <div style={{ paddingTop: "20px" }}>
+              <button
+                className="bg-blue-500 text-white px-6 py-3 rounded-md font-bold text-lg hover:bg-blue-600"
+                onClick={handleBookCab}
+              >
+                Confirm Booking
+              </button>
+            </div>
+            <div style={{ paddingTop: "20px" }}></div>
           </div>
         )}
-
-        <div style={{ paddingTop: "20px" }}>
-          <button
-            className="bg-blue-500 text-white px-6 py-3 rounded-md font-bold text-lg hover:bg-blue-600"
-            onClick={handleBookCab}
-          >
-            Confirm Booking
-          </button>
-        </div>
       </div>
     </div>
   );
