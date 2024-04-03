@@ -2,7 +2,10 @@ function Header() {
   return (
     <header className="flex items-center h-16 px-4 border-b shrink-0 md:px-6">
       <div className="flex items-center gap-2 text-lg font-semibold lg:gap-4">
-        <a href="/home" className="flex items-center gap-2 text-lg font-semibold lg:gap-4">
+        <a
+          href="/home"
+          className="flex items-center gap-2 text-lg font-semibold lg:gap-4"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

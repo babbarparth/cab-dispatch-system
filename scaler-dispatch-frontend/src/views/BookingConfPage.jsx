@@ -1,4 +1,4 @@
-import Header from '../components/header_components';
+import Header from '../components/HeaderComponent';
 
 
 const BookingConfPage = () => {

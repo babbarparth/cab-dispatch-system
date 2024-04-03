@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import Header from "../components/header_components";
+import Header from "../components/HeaderComponent";
 import axios from "axios";
 
 const CurrentBookings = () => {
   const [bookings, setBookings] = useState([]);
+
 
   useEffect(() => {
     // Fetch bookings data from backend API
@@ -11,7 +12,7 @@ const CurrentBookings = () => {
     const fetchData = async () => {
       try {
         axios
-          .get(`http://localhost:3000/api/booking/allBookings`, {
+          .get(`${import.meta.env.VITE_APP_BASE_URL}/api/booking/allBookings`, {
             headers: {
               "Content-Type": "application/json",
             },

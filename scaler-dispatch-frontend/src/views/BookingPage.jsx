@@ -1,32 +1,10 @@
 import { useEffect, useState } from "react";
-import Header from "../components/header_components";
+import Header from "../components/HeaderComponent";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import BookingForm from "../components/BookingForm";
 
 const locations = ["A", "B", "C", "D", "E", "F"];
-
-function Dropdown({ id, label, options, placeholder, onChange }) {
-  return (
-    <div>
-      <label htmlFor={id} className="block text-sm font-semibold mb-1">
-        {label}
-      </label>
-      <select
-        id={id}
-        className="w-full border rounded-md px-3 py-2"
-        onChange={onChange}
-      >
-        <option value="">{placeholder}</option>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-}
 
 const BookingPage = () => {
   const navigate = useNavigate();
@@ -43,7 +21,7 @@ const BookingPage = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/tariff/tariffRate")
+      .get(`${import.meta.env.VITE_APP_BASE_URL}/api/tariff/tariffRate`)
       .then((response) => {
         setTaxiData(response.data);
       })
@@ -56,7 +34,7 @@ const BookingPage = () => {
     if (source && destination) {
       axios
         .post(
-          `http://localhost:3000/api/getDist`,
+          `${import.meta.env.VITE_APP_BASE_URL}/api/getDist`,
           {
             source,
           },
@@ -109,6 +87,7 @@ const BookingPage = () => {
       console.error("Please select a tariff before booking.");
       return;
     }
+    console.log("here");
 
     const pickUpDateTime = new Date(`${date}T${time}:00Z`);
     const dropOffDateTime = new Date(
@@ -134,7 +113,10 @@ const BookingPage = () => {
 
     // Send a POST request to create a new booking
     axios
-      .post("http://localhost:3000/api/booking/createBooking", bookingData)
+      .post(
+        `${import.meta.env.VITE_APP_BASE_URL}/api/booking/createBooking`,
+        bookingData
+      )
       .then((response) => {
         console.log("Booking created successfully:", response.data);
         navigate("/booking");
@@ -145,6 +127,8 @@ const BookingPage = () => {
       });
   };
 
+  console.log(distances);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -152,72 +136,17 @@ const BookingPage = () => {
       <div className="container mx-auto mt-10">
         <h1 className="text-3xl font-bold mb-6">Book a Cab</h1>
 
-        <div className="mb-6">
-          <h2 className="text-xl font-bold mb-3">Enter your details</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <Dropdown
-              id="source"
-              label="Source Location"
-              options={locations}
-              placeholder="Select source location"
-              onChange={handleSourceChange}
-            />
-            <Dropdown
-              id="destination"
-              label="Destination"
-              options={locations}
-              placeholder="Select destination"
-              onChange={handleDestinationChange}
-            />
-            <div>
-              <label
-                htmlFor="date"
-                className="block text-sm font-semibold mb-1"
-              >
-                Date
-              </label>
-              <input
-                id="date"
-                type="date"
-                className="w-full border rounded-md px-3 py-2"
-                value={date}
-                onChange={handleDateChange}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="time"
-                className="block text-sm font-semibold mb-1"
-              >
-                Time
-              </label>
-              <input
-                id="time"
-                type="time"
-                className="w-full border rounded-md px-3 py-2"
-                value={time}
-                onChange={handleTimeChange}
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-semibold mb-1"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                className="w-full border rounded-md px-3 py-2"
-                placeholder="Enter your email"
-                value={email}
-                onChange={handlEmailChange}
-              />
-            </div>
-          </div>
-        </div>
-
+        <BookingForm
+          locations={locations}
+          date={date}
+          time={time}
+          email={email}
+          handleSourceChange={handleSourceChange}
+          handleDestinationChange={handleDestinationChange}
+          handleDateChange={handleDateChange}
+          handleTimeChange={handleTimeChange}
+          handlEmailChange={handlEmailChange}
+        />
         <button
           className="bg-blue-500 text-white px-6 py-3 rounded-md font-bold text-lg hover:bg-blue-600 mb-6"
           onClick={handleSearch}

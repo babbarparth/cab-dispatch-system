@@ -6,6 +6,12 @@ import {
 
 import nodemailer from "nodemailer";
 
+const convetUTCtoIST = (date) => {
+  return new Date(date).toLocaleString("en-US", {
+    timeZone: "Asia/Kolkata",
+  });
+};
+
 const bookingEmail = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -75,10 +81,16 @@ const createBookingService = async (req, res) => {
     <p>We are delighted to confirm your booking with our cab system. Your booking details are as follows:</p>
     <ul>
       <li><strong>Pickup Location:</strong> ${pickupLocation}</li>
-      <li><strong>Dropoff Location:</strong> ${formattedBookingTime}</li>
-      <li><strong>Booking Time:</strong>  ${formattedPickupTime}</li>
-      <li><strong>Pickup Time:</strong>  ${formattedDropoffTime}</li>
-      <li><strong>Dropoff Time:</strong> ${dropoffTime}</li>
+      <li><strong>Dropoff Location:</strong> ${dropoffLocation}</li>
+      <li><strong>Booking Time:</strong>  ${convetUTCtoIST(
+        formattedBookingTime
+      )}</li>
+      <li><strong>Pickup Time:</strong>  ${convetUTCtoIST(
+        formattedPickupTime
+      )}</li>
+      <li><strong>Dropoff Time:</strong> ${convetUTCtoIST(
+        formattedDropoffTime
+      )}</li>
       <li><strong>Total Time:</strong>  "${totalFare} mins"</li>
     
     </ul>
