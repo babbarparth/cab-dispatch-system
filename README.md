@@ -1,4 +1,4 @@
-# Scalar SDE Intern Cab System Task
+# Scaler SDE Intern Cab System Task
 
 This project is a web application developed using JavaScript, React, Node.js, NodeMailer, and Tailwind CSS. It serves as a platform for managing cab bookings, calculating optimal routes, and estimating costs for users' trips. The system ensures efficient cab allocation, scheduling, and tracking, enhancing the overall user experience.
 
@@ -74,7 +74,7 @@ npm start
 cd ..
 ```
 ```
-cd scalar-dispatch-frontend
+cd scaler-dispatch-frontend
 ```
 ```
 npm install
@@ -84,7 +84,7 @@ npm run dev
 ```
 
 ### Documentation
-#### Scalar SDE task link: 
+#### Scaler SDE task link: 
 ```
 https://docs.google.com/document/d/1e6riWL2gKXFqv6lhRoKIHr3vtThfdW4rhsPmr5SWmu4/edit
 ```
