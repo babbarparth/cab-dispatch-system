@@ -17,10 +17,11 @@ const BookingPage = () => {
   const [source, setSource] = useState(null);
   const [destination, setDestination] = useState(null);
   const [selectedTariff, setSelectedTariff] = useState(null);
-  const [showTariffList, setShowTariffList] = useState(false); // State to manage visibility of tariff list
-  const [date, setDate] = useState(""); // State for date input
-  const [time, setTime] = useState(""); // State for time input
-  const [email, setEmail] = useState(""); // State for time input
+  const [showTariffList, setShowTariffList] = useState(false);
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [email, setEmail] = useState("");
+  const [sendEmailLoading, setSendEmailLoading] = useState(false);
 
   useEffect(() => {
     axios
@@ -31,7 +32,7 @@ const BookingPage = () => {
       .catch((error) => {
         console.error("Error fetching bookings:", error);
       });
-  }, []); // Ensure that this effect runs only once
+  }, []);
 
   useEffect(() => {
     if (source && destination) {
@@ -44,7 +45,7 @@ const BookingPage = () => {
           },
           {
             headers: {
-              "Content-Type": "application/x-www-form-urlencoded", // Set the content type header
+              "Content-Type": "application/x-www-form-urlencoded",
             },
           }
         )
@@ -81,7 +82,6 @@ const BookingPage = () => {
     setShowTariffList(true);
   };
 
-  // Update handleDateChange function to capture date input value
   const handleDateChange = (e) => {
     setDate(e.target.value);
   };
@@ -90,7 +90,6 @@ const BookingPage = () => {
     setEmail(e.target.value);
   };
 
-  // Update handleTimeChange function to capture time input value
   const handleTimeChange = (e) => {
     setTime(e.target.value);
   };
@@ -108,13 +107,12 @@ const BookingPage = () => {
       toast.error("Please enter a valid email address.");
       return;
     }
-    console.log("here");
+    setSendEmailLoading(true);
 
     const pickUpDateTime = new Date(`${date}T${time}`);
     const dropOffDateTime = new Date(
       pickUpDateTime.getTime() + distances[destination] * 60000
-    ); // Convert minutes to milliseconds
-    // Prepare booking data with the selected car type
+    );
     const bookingData = {
       adminId: 1,
       userId: 1,
@@ -122,7 +120,7 @@ const BookingPage = () => {
       pickupLocation: source,
       dropoffLocation: destination,
       bookingTime: new Date().toISOString(),
-      pickupTime: pickUpDateTime, // Include date and time from state variables
+      pickupTime: pickUpDateTime,
       dropoffTime: dropOffDateTime,
       totalFare: distances[destination] * selectedTariff.distanceRate,
       totalMinutes: distances[destination],
@@ -133,7 +131,6 @@ const BookingPage = () => {
       bookingStatus: "Confirmed", // Include other booking details as needed
     };
 
-    // Send a POST request to create a new booking
     axios
       .post(
         `${import.meta.env.VITE_APP_BASE_URL}/api/booking/createBooking`,
@@ -143,14 +140,19 @@ const BookingPage = () => {
         console.log("Booking created successfully:", response.data);
         toast.success("Booking created successfully!");
         navigate("/home");
-        // Redirect or perform any action after successful booking
       })
       .catch((error) => {
         console.error("Error creating booking:", error);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setSendEmailLoading(false);
+        }, 500);
       });
   };
 
   console.log(distances);
+  console.log(sendEmailLoading);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -181,14 +183,12 @@ const BookingPage = () => {
           <div>
             Time from {source} to {destination} is {distances[destination]}{" "}
             mins.
-            <div>Shortest Route {path.join(" -> ")}</div>
-            {/* Display the list of car types with their rates */}
+            <div className="mb-4">Shortest Route {path.join(" -> ")}</div>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
               {taxiData.map((type, index) => {
-                // Check if the tariff is available
                 const isTariffAvailable = type.availableAfter
                   ? new Date(type.availableAfter) <= new Date()
-                  : true; // If availableAfter is null, assume it's always available
+                  : true;
 
                 return (
                   <label key={index} htmlFor={`tariff-${index}`}>
@@ -281,10 +281,11 @@ const BookingPage = () => {
             </div>
             <div style={{ paddingTop: "20px" }}>
               <button
-                className="bg-blue-500 text-white px-6 py-3 rounded-md font-bold text-lg hover:bg-blue-600"
+                className={`bg-blue-500 text-white px-6 py-3 rounded-md font-bold text-lg cursor-pointer hover:bg-blue-600`}
                 onClick={handleBookCab}
+                disabled={sendEmailLoading}
               >
-                Confirm Booking
+                {sendEmailLoading ? "Booking a Cab..." : "Confirm Booking"}
               </button>
             </div>
             <div style={{ paddingTop: "20px" }}></div>

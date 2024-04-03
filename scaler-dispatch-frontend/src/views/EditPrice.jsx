@@ -18,7 +18,7 @@ const EditPrice = () => {
       .catch((error) => {
         console.error("Error fetching tariff rates:", error);
       });
-  }, []); // Ensure that this effect runs only once
+  }, []); 
 
   const handleSave = () => {
     const selectedCab = taxiData.find(

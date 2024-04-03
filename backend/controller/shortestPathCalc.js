@@ -70,7 +70,6 @@ export const findShortestPath = (req, res) => {
 
   const { distances, predecessors } = dijkstra(graph, source);
 
-  // Construct the shortest path from source to destination
   const shortestPath = [];
   let currentVertex = destination;
   while (currentVertex !== null) {

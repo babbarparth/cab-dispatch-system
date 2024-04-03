@@ -19,7 +19,7 @@ const CurrentBookings = () => {
           }
         );
         setBookings(response.data);
-        setLoading(false); // Set loading to false when data is fetched
+        setLoading(false); 
       } catch (error) {
         console.error("Error fetching bookings:", error);
       }
@@ -31,9 +31,9 @@ const CurrentBookings = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
-    }, 60000); // Update current time every minute
+    }, 60000);
 
-    return () => clearInterval(timer); // Cleanup interval on component unmount
+    return () => clearInterval(timer);
   }, []);
 
   const getStatus = (booking) => {
@@ -56,7 +56,7 @@ const CurrentBookings = () => {
         <h2 className="text-3xl font-bold text-center mb-8">
           Bookings History
         </h2>
-        {loading ? ( // Display loading animation if data is being fetched
+        {loading ? ( 
           <div className="flex items-center justify-center">
             <div className="spinner"></div>
             <span>Loading...</span>

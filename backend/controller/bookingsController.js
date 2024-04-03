@@ -68,15 +68,7 @@ const createBookingService = async (req, res) => {
     bookingStatus,
   };
 
-  try {
-    const newBooking = await addBooking(bookingData);
-    await updateTariffAvailbilityById(tariffId, dropoffTime);
-
-    const mail = {
-      from: "Support Cab System",
-      to: userEmail,
-      subject: "Booking Confirmation",
-      html: `
+  const emailTemplate = `
            <h1>Booking Confirmation</h1>
     <p>Dear ${userEmail},</p>
     <p>We are delighted to confirm your booking with our cab system. Your booking details are as follows:</p>
@@ -96,21 +88,33 @@ const createBookingService = async (req, res) => {
 
     <hr/>
     <p><em>This is for testing purposes only. No actual cab has been booked. Created by Parth Babbar for Scaler assignment.</em></p>
-        `,
+        `;
+
+  try {
+    const newBooking = await addBooking(bookingData);
+    await updateTariffAvailbilityById(tariffId, dropoffTime);
+
+    const mail = {
+      from: "Support Cab System",
+      to: userEmail,
+      subject: "Booking Confirmation",
+      html: emailTemplate,
     };
+
     bookingEmail.sendMail(mail, (error) => {
       if (error) {
         console.log("Error sending email");
-        // res.json({ status: "ERROR" });
       } else {
         console.log("Message Sent");
-        // res.json({ status: "Message Sent" });
       }
     });
+
     res.json(newBooking);
   } catch (error) {
+
     console.error("Error creating booking:", error);
     res.status(500).send("Internal server error");
+    
   }
 };
 

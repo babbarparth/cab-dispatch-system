@@ -26,7 +26,7 @@ This project is a web application developed using JavaScript, React, Node.js, an
 •⁠  ⁠.env: Configuration file for environment variables.
 
 ```
-VITE_APP_BASE_URL="//ec2-54-166-10-82.compute-1.amazonaws.com:3000"
+VITE_APP_BASE_URL="https://scaler-dispatch-system-1.onrender.com/api/booking/allBookings"
 # VITE_APP_BASE_URL="http://localhost:3000"
 ```
 ### Installation
