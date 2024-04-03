@@ -42,8 +42,10 @@ const createBookingService = async (req, res) => {
     pickupTime,
     dropoffTime,
     totalFare,
+    totalMinutes,
+    shortestRoute,
     userEmail,
-    TariffID,
+    tariffId,
     paymentMethod,
     bookingStatus,
   } = req.body;
@@ -58,18 +60,17 @@ const createBookingService = async (req, res) => {
     pickupTime,
     dropoffTime,
     totalFare,
+    totalMinutes,
+    shortestRoute,
     userEmail,
-    TariffID,
+    tariffId,
     paymentMethod,
     bookingStatus,
   };
 
   try {
     const newBooking = await addBooking(bookingData);
-    await updateTariffAvailbilityById(TariffID, dropoffTime);
-    const formattedBookingTime = new Date(bookingTime).toLocaleString();
-    const formattedPickupTime = new Date(pickupTime).toLocaleString();
-    const formattedDropoffTime = new Date(dropoffTime).toLocaleString();
+    await updateTariffAvailbilityById(tariffId, dropoffTime);
 
     const mail = {
       from: "Support Cab System",
@@ -82,17 +83,12 @@ const createBookingService = async (req, res) => {
     <ul>
       <li><strong>Pickup Location:</strong> ${pickupLocation}</li>
       <li><strong>Dropoff Location:</strong> ${dropoffLocation}</li>
-      <li><strong>Booking Time:</strong>  ${convetUTCtoIST(
-        formattedBookingTime
-      )}</li>
-      <li><strong>Pickup Time:</strong>  ${convetUTCtoIST(
-        formattedPickupTime
-      )}</li>
-      <li><strong>Dropoff Time:</strong> ${convetUTCtoIST(
-        formattedDropoffTime
-      )}</li>
-      <li><strong>Total Time:</strong>  "${totalFare} mins"</li>
-    
+      <li><strong>Booking Time:</strong>  ${convetUTCtoIST(bookingTime)}</li>
+      <li><strong>Pickup Time:</strong>  ${convetUTCtoIST(pickupTime)}</li>
+      <li><strong>Dropoff Time:</strong> ${convetUTCtoIST(dropoffTime)}</li>
+      <li><strong>Shortest Route:</strong>  ${shortestRoute}</li>
+      <li><strong>Total Time:</strong>  ${totalMinutes} min</li>
+      <li><strong>Total Price:</strong>  ₹${totalFare}</li>
     </ul>
 
     <p>Thank you for choosing our cab system. We look forward to serving you!</p>

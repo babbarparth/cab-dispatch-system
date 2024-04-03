@@ -6,5 +6,5 @@
 
 */
 -- AlterTable
-ALTER TABLE "Booking" ALTER COLUMN "TariffID" SET NOT NULL,
+ALTER TABLE "Booking" ALTER COLUMN "tariffId" SET NOT NULL,
 ALTER COLUMN "userEmail" SET NOT NULL;
