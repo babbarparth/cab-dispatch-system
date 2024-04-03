@@ -5,8 +5,8 @@ This project is a web application developed using JavaScript, React, Node.js, an
 ## Functionality
 
 ### Cab Booking Management
-•⁠  ⁠Users can book cabs by specifying their email, source, and destination.
-•⁠  ⁠The system calculates the shortest possible time from the source to the destination, ensuring efficient routing.
+•⁠  ⁠Users can book cabs by specifying their email, source, and destination. <br>
+•⁠  ⁠The system calculates the shortest possible time from the source to the destination, ensuring efficient routing. <br>
 •⁠  ⁠Cab bookings are managed to prevent overlapping start and end times, eliminating scheduling conflicts.
 
 ### Cab Pricing
