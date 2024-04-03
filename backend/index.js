@@ -28,29 +28,6 @@ app.use("/api", distanceRoute);
 app.use("/api/booking", bookingRoute);
 app.use("/api/tariff", tariffRoute);
 
-// router.post("/contact", (req, res) => {
-//   const name = req.body.name;
-//   const email = req.body.email;
-//   const message = req.body.message;
-//   const mail = {
-//     from: name,
-//     to: "scottishcoder99@gmail.com",
-//     subject: "Contact Form Submission",
-//     html: `
-//             <p>Name: ${name}</p>
-//             <p>Email: ${email}</p>
-//             <p>MessageP: ${message}</p>
-//         `,
-//   };
-//   contactEmail.sendMail(mail, (error) => {
-//     if (error) {
-//       res.json({ status: "ERROR" });
-//     } else {
-//       res.json({ status: "Message Sent" });
-//     }
-//   });
-// });
-
 app.get("/getdata", (req, res) => {
   getAllTariff()
     .then((data) => res.json(data))
