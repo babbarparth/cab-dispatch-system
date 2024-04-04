@@ -31,7 +31,7 @@ This project is a web application developed using JavaScript, React, Node.js, No
 ## Deployment
 
 •⁠  ⁠Frontend: The frontend of this application is deployed on [Vercel](https://vercel.com/). You can access the web application [here](https://scaler-dispatch-system.vercel.app/).<br>
-•⁠  ⁠Backend: The backend is deployed on Render. 
+•⁠  ⁠Backend: The backend is deployed on Render(it may take 1-2 minutes to boot the server). 
 
 ## Tech Used:
 
