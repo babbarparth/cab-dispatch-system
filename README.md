@@ -46,6 +46,7 @@ Backend/
 ├── NodeMailer
 ├── Express
 ├── Dijkstra Algorithm (used to calculate the shortest time between source and destination)
+├── PostgreSQL
 ```
 
 ## Environment Variables
