@@ -91,5 +91,5 @@ https://docs.google.com/document/d/1e6riWL2gKXFqv6lhRoKIHr3vtThfdW4rhsPmr5SWmu4/
 ```
 #### Notion link: 
 ```
-https://www.notion.so/Scaler-SDE-Intern-FullStack-Assignment-Cab-System-f8a00680c6b042d780282bf859ec2028?pvs=4
+https://alluring-cross-45f.notion.site/Scaler-SDE-Intern-FullStack-Assignment-Cab-System-f8a00680c6b042d780282bf859ec2028
 ```
