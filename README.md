@@ -1,4 +1,4 @@
-# Scaler SDE Intern Cab System Task
+#  Cab System Task
 
 This project is a web application developed using JavaScript, React, Node.js, NodeMailer, and Tailwind CSS. It serves as a platform for managing cab bookings, calculating optimal routes, and estimating costs for users' trips. The system ensures efficient cab allocation, scheduling, and tracking, enhancing the overall user experience.
 
